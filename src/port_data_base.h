@@ -37,7 +37,7 @@ namespace flowvr
   }
 
   template < typename data >
-  void parse_message(flowvr::ModuleAPI * flowvr_api, flowvr::Message &m, data &out )
+  void parse_message(flowvr::Message &m, data &out )
   {
     using namespace std;
 

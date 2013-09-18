@@ -2,6 +2,12 @@ build/
 nbproject/
 tmp/
 
+#Ignore all
+extra_distrib/*
+#Don't ignore CMakeLists.txt
+!extra_distrib/CMakeLists.txt
+
+
 # Compiled Object files
 *.slo
 *.lo

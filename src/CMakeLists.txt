@@ -1,39 +1,21 @@
-find_package(Qt4)
+get_property(PDB_EXAMPLES_FOLDER       TARGET pdb_examples PROPERTY WORK_FOLDER)
+get_property(SHIFT_CALC_PROJECT_FOLDER TARGET shiftx2      PROPERTY _EP_BINARY_DIR)
 
-if(QT4_FOUND)
-  find_package(Qwt)
-  if(QWT_FOUND)
-    include(${QT_USE_FILE} )
+get_property(PDB_FRAMES_FOLDER TARGET   gromacs_traj PROPERTY PDB_FRAMES_FOLDER)
+get_property(PDB_FRAMES_SUFFIX TARGET   gromacs_traj PROPERTY PDB_FRAMES_SUFFIX)
 
-    set(SRC_NMRVIS_GUI_CODE nmr_plot.cpp c_flowvr_event_loop.cpp) 
-    
-    set(SRC_NMRVIS_GUI_CODE ${SRC_NMRVIS_GUI_CODE} ${CMAKE_SOURCE_DIR}/libs/utils/math_utils.cpp ) 
-    
-    
-    set(UIS nmr_plot.ui)
-    set(MOC_HEADERS nmr_plot.h c_flowvr_event_loop.h)
+configure_file(proj_folders.h.cfg proj_folders.h)
 
-    qt4_wrap_ui(UI_HEADERS ${UIS})
-    qt4_wrap_cpp(MOC_SRCS ${MOC_HEADERS})
-    
-    include_directories(${CMAKE_SOURCE_DIR}/libs/utils/
-                        ${CMAKE_CURRENT_BINARY_DIR} ${QWT_INCLUDE_DIR} 
-                        ${FLOWVR_base_INCLUDE_DIR} ${FLOWVR_mod_INCLUDE_DIR}
-                        ${Boost_INCLUDE_DIRS} )
-    
-    add_executable(nmr_module main.cpp
-                              ${SRC_NMRVIS_GUI_CODE} 
-                              ${UI_HEADERS}
-                              ${MOC_SRCS}
-                              ${QT_RES_RCC} )
+#get_property(PDB_IO_SRC TARGET pdb_io PROPERTY _EP_SOURCE_DIR)
+#set(PDB_IO_INCLUDE "${PDB_IO_SRC}/include")
 
-    set(NMRVIS_GUI_LIBS ${QT_LIBRARIES} ${QWT_LIBRARY}
-                         ${FLOWVR_base_LIBRARY} 
-                         ${FLOWVR_mod_LIBRARY}
-                         ${Boost_LIBRARIES} )
+get_property(COMMON_UTILS_SRC_FOLDER TARGET common_utils PROPERTY ROOT_SRC_FOLDER)
 
-    target_link_libraries(nmr_module ${NMRVIS_GUI_LIBS})
-  endif()  
-endif()
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_BINARY_DIR} )
 
-add_subdirectory(fake_io_mod)
+#add_subdirectory(fake_io_mod)
+add_subdirectory(selector_mod)
+add_subdirectory(pdb_generate_mod)
+add_subdirectory(shift_calc_mod)
+add_subdirectory(spectra_gui)

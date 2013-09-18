@@ -9,9 +9,13 @@ set(CMAKE_BUILD_TYPE Debug)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-find_package(Boost 1.49 REQUIRED COMPONENTS serialization)
+find_package(Boost 1.46 REQUIRED COMPONENTS regex serialization filesystem system)
 find_package(FlowVR)
 
+add_subdirectory(libs)
+add_subdirectory(data)
+add_subdirectory(extra_distrib)
 add_subdirectory(src)
 add_subdirectory(start_scripts)
+
 

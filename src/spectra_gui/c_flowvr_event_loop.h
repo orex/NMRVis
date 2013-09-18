@@ -18,13 +18,19 @@
 
 #include <fstream>
 
+#include "nmr_shift_data_process.h"
+
 class c_flowvr_event_loop : public QObject
 {
    Q_OBJECT
 private:
   bool _terminate;
 protected:
-  flowvr::InputPort * pSelect;      
+  flowvr::InputPort * p_ids_in;
+  flowvr::InputPort * p_spc_in;
+  
+  flowvr::OutputPort * p_ids_out;
+  
   flowvr::ModuleAPI * flowvr_var;
   std::vector<flowvr::Port*> ports;  
 
@@ -36,7 +42,7 @@ public slots:
 signals:
   void flowvr_terminated();
   void flowvr_new_selection( QVector<int> );
-
+  void flowvr_new_spc(nmr_shift_data_process * );
 public:
   c_flowvr_event_loop(QApplication &app, QThread &thread);
   bool initialize_flowvr();

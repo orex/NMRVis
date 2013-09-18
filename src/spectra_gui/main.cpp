@@ -18,6 +18,7 @@
 
 #include "nmr_plot.h"
 #include "c_flowvr_event_loop.h"
+#include "nmr_shift_data_process.h"
 
 using namespace std;
 using namespace flowvr;
@@ -53,6 +54,7 @@ int main(int argc, char *argv[])
   qRegisterMetaType< QVector<int> >("QVector<int>");
   
   QObject::connect(flowvr_loop, SIGNAL(flowvr_new_selection( QVector<int> )), main_window, SLOT(new_selection( QVector<int> )));
+  QObject::connect(flowvr_loop, SIGNAL(flowvr_new_spc(nmr_shift_data_process * )), main_window, SLOT(new_spc(nmr_shift_data_process * )));
   
   //Qt signal aboutToQuit() is not emmited bu unknown reason.
   //QObject::connect(&app, SIGNAL(aboutToQuit()), flowvr_loop, SLOT(flowvr_terminate()));

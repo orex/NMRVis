@@ -9,9 +9,13 @@ using namespace std;
 
 int main(int argc, const char** argv)
 {
-  flowvr::OutputPort pOut("test_ids");
+  flowvr::InputPort  p_ids_in("ids_in");
+  p_ids_in.setNonBlockingFlag(true);
+  
+  flowvr::OutputPort p_ids_out("ids_out");
   std::vector<flowvr::Port*> ports;
-  ports.push_back(&pOut);
+  ports.push_back(&p_ids_in);
+  ports.push_back(&p_ids_out);
   flowvr::ModuleAPI* flowvr_api = flowvr::initModule(ports);
   if (flowvr_api == NULL)
   {
@@ -24,23 +28,28 @@ int main(int argc, const char** argv)
     // Build data
     vector<int> test_ids;
     
-    for(int i = 0; i < 5; i++)
-      test_ids.push_back(rand() % 20);
+    flowvr::Message m_in;
+    
+    flowvr_api->get(&p_ids_in, m_in);
+    
+    if(m_in.data.getSize() > 0)
+      flowvr::parse_message(m_in, test_ids);
+    
+    //for(int i = 0; i < 5; i++)
+      //test_ids.push_back(rand() % 20);
+    
+    if(it % 60 == 0)
+      test_ids.clear();
     
     flowvr::MessageWrite * m = flowvr::create_message(flowvr_api, test_ids);
     
     // Send message
-    flowvr_api->put(&pOut, *m);
+    flowvr_api->put(&p_ids_out, *m);
     
     delete m;
 
     // Log info
-    int mit;
-    m->stamps.read(pOut.stamps->it,mit);
-    
-    cout<<"Sent " << " (it="<< mit <<")" << endl;
-
-    sleep(1);
+    usleep(1E5);
     ++it;
   }
 
